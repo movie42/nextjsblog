@@ -5,8 +5,8 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
 
-interface IpostProps {
-  post: { content: any };
+interface PostPagesProps {
+  post: any;
 }
 
 const fetcher = async (id: string) => {
@@ -14,10 +14,14 @@ const fetcher = async (id: string) => {
   return await response.json();
 };
 
-const PostPages = () => {
-  const [html, setHtml] = useState<any>();
-  const router = useRouter();
-  const id = router.query.id as string;
+const PostPages = ({ post }: PostPagesProps) => {
+  return <div dangerouslySetInnerHTML={{ __html: post.html.value }} />;
+};
+
+export default PostPages;
+
+export const getStaticProps = async (context: any) => {
+  const id = context.params.id;
 
   const getItem = async () => {
     const meta = await fetcher(id);
@@ -26,26 +30,13 @@ const PostPages = () => {
       .use(remarkParse)
       .use(remarkHtml)
       .process(htmlData);
-    setHtml(html);
+    return html;
   };
 
-  useEffect(() => {
-    getItem();
-  }, []);
+  const html = JSON.parse(JSON.stringify(await getItem()));
 
-  return (
-    <>
-      <div>Post : {id}</div>
-      <div dangerouslySetInnerHTML={{ __html: html }} />
-    </>
-  );
-};
-
-export default PostPages;
-
-export const getStaticProps = async () => {
   return {
-    props: { post: {} }
+    props: { post: { html } }
   };
 };
 
