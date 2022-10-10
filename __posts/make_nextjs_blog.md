@@ -18,3 +18,11 @@ title: NextJS로 블로그 만들어보기
 [다이나믹 라우트](https://nextjs.org/docs/routing/dynamic-routes)는 잘 이해가 되지 않지만 [예제](https://github.com/vercel/next.js/blob/canary/examples/dynamic-routing/pages/post/%5Bid%5D/%5Bcomment%5D.tsx)를 보고 따라서 만들었다.
 
 폴더 안에 다이나믹 라우팅을 하려는 항목을 문자열로 넣고 그 안에 파일을 파일을 만든다. pages 폴더의 파일이나 폴더의 이름이 라우터의 이름이 되는 것이기 때문에 [id]는 :id에 해당한다. 폴더를 경로로 지정하고 싶다면 폴더 안에 이름이 index인 jsx 파일을 만들어주면 폴더 이름으로 된 경로가 생성된다.
+
+> Q. NextJS는 왜 폴더로 라우팅을 하는걸까?
+
+## SSG로 페이지 만들기
+
+### getStaticProps
+
+Docs Data Fetching에서 SSG를 클릭하면 getStaticProps로 바로 연결된다. 이름만 읽어보면 고정 된(정적인) Props를 얻는 함수같다. 아마도 미리 정해진 프로퍼티들을 가져오는 역할을 하는 함수로 보인다.
