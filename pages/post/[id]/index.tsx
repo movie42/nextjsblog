@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { readFile } from "@/pages/api/readFile";
+import { readFile } from "@/lib/readFile";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
@@ -9,22 +9,28 @@ interface IpostProps {
   post: { content: any };
 }
 
-const PostPages = ({ post }: IpostProps) => {
+const fetcher = async (id: string) => {
+  const response = await fetch(`http://localhost:3000/api/posts/${id}`);
+  return await response.json();
+};
+
+const PostPages = () => {
   const [html, setHtml] = useState<any>();
   const router = useRouter();
   const id = router.query.id as string;
 
-  async function makeHtml() {
+  const getItem = async () => {
+    const meta = await fetcher(id);
+    const [htmlData] = meta.data.map((value: any) => value.meta.content);
     const html = await unified()
       .use(remarkParse)
       .use(remarkHtml)
-      .process(post.content.meta.content);
-
-    setHtml(html.value);
-  }
+      .process(htmlData);
+    setHtml(html);
+  };
 
   useEffect(() => {
-    makeHtml();
+    getItem();
   }, []);
 
   return (
@@ -37,15 +43,9 @@ const PostPages = ({ post }: IpostProps) => {
 
 export default PostPages;
 
-export const getStaticProps = async (context: any) => {
-  const readFiles = readFile();
-  const [file] = readFiles.filter((value) => {
-    return String(value.meta.data.slug) === String(context.params.id);
-  });
-
-  const content = JSON.parse(JSON.stringify(file));
+export const getStaticProps = async () => {
   return {
-    props: { post: { content } }
+    props: { post: {} }
   };
 };
 
