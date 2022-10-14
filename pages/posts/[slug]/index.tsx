@@ -10,11 +10,6 @@ interface Props {
   preview?: boolean;
 }
 
-// const fetcher = async (id: string) => {
-//   const response = await fetch(`http://localhost:3000/api/posts/${id}`);
-//   return await response.json();
-// };
-
 const PostPages = ({ post, morePosts, preview }: Props) => {
   const router = useRouter();
   if (!router.isFallback && !post?.slug) {

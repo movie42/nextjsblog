@@ -1,3 +1,5 @@
+import { PostItem } from "@/components";
+import PostsListItemContainer from "@/components/postsContainer";
 import Post from "@/interfaces/post";
 import { getAllPosts } from "@/lib/readFile";
 import Link from "next/link";
@@ -8,13 +10,13 @@ type Props = {
 
 const Index = ({ posts }: Props) => {
   return (
-    <ul>
+    <PostsListItemContainer>
       {posts?.map((post: any) => (
-        <li key={post.slug}>
+        <PostItem key={post.slug}>
           <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-        </li>
+        </PostItem>
       ))}
-    </ul>
+    </PostsListItemContainer>
   );
 };
 
